@@ -154,6 +154,8 @@ export default function MotionSystem() {
     };
   }, [pathname]);
 
+  if (pathname !== '/') return null;
+
   return (
     <div className="kridaIntelligenceTrack" aria-hidden="true">
       <span className="kridaIntelligenceLine" />
