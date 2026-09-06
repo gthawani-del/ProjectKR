@@ -40,44 +40,51 @@ export default function MotionSystem() {
       lenis.on('scroll', ScrollTrigger.update);
     }
 
+    const headerOffset = () => mobile ? -72 : -96;
+
     const jumpToTop = () => {
-      if (lenis) {
-        lenis.scrollTo(0, { duration: 0, force: true });
-      } else {
-        window.scrollTo(0, 0);
-      }
+      if (lenis) lenis.scrollTo(0, { duration: 0, force: true });
+      else window.scrollTo(0, 0);
     };
 
     const scrollToTop = () => {
-      if (lenis) {
-        lenis.scrollTo(0, { duration: 0.9, force: true, onComplete: () => ScrollTrigger.refresh() });
-      } else {
-        window.scrollTo({ top: 0, left: 0, behavior: reduced ? 'auto' : 'smooth' });
-      }
+      if (lenis) lenis.scrollTo(0, { duration: 0.9, force: true, onComplete: () => ScrollTrigger.refresh() });
+      else window.scrollTo({ top: 0, left: 0, behavior: reduced ? 'auto' : 'smooth' });
     };
 
-    const scrollToSelector = (selector: string) => {
+    const scrollToSelector = (selector: string, immediate = false) => {
       const target = document.querySelector<HTMLElement>(selector);
       if (!target) return;
+      if (selector === '#top') {
+        if (immediate) jumpToTop(); else scrollToTop();
+        return;
+      }
       if (lenis) {
-        lenis.scrollTo(target, { duration: 0.8, force: true, onComplete: () => ScrollTrigger.refresh() });
+        lenis.scrollTo(target, { duration: immediate ? 0 : 0.8, force: true, offset: headerOffset(), onComplete: () => ScrollTrigger.refresh() });
       } else {
-        target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+        const top = target.getBoundingClientRect().top + window.scrollY + headerOffset();
+        window.scrollTo({ top: Math.max(0, top), left: 0, behavior: immediate || reduced ? 'auto' : 'smooth' });
       }
     };
 
-    // Cross-route Home navigation must land at the true document top.
-    if (pathname === '/' && window.location.hash === '#top') {
+    // Internal route transitions intentionally start at the page top.
+    if (pathname !== '/' && !window.location.hash) {
       jumpToTop();
+      requestAnimationFrame(jumpToTop);
+    }
+
+    // Cross-route links into homepage anchors are settled after layout/motion init.
+    if (pathname === '/' && window.location.hash) {
+      const selector = window.location.hash;
+      scrollToSelector(selector, true);
       requestAnimationFrame(() => {
-        jumpToTop();
+        scrollToSelector(selector, true);
         ScrollTrigger.refresh();
       });
       settleTimers.push(window.setTimeout(() => {
-        jumpToTop();
+        scrollToSelector(selector, true);
         ScrollTrigger.refresh();
-        history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
-      }, 120));
+      }, 140));
     }
 
     const onScrollTopRequest = () => scrollToTop();
@@ -90,13 +97,32 @@ export default function MotionSystem() {
     window.addEventListener('krida:scroll-top', onScrollTopRequest);
     window.addEventListener('krida:scroll-to', onScrollTargetRequest);
 
-    const topLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href="#top"], a[href="/#top"]'));
+    // Homepage same-page anchor links use the same scroll engine as sector selection.
+    const homeAnchorLinks = pathname === '/'
+      ? Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')).filter((link) => !link.classList.contains('skipLink'))
+      : [];
+    const homeAnchorHandlers = homeAnchorLinks.map((link) => {
+      const handler = (event: MouseEvent) => {
+        const href = link.getAttribute('href');
+        if (!href || href === '#') return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        event.preventDefault();
+        history.replaceState(null, '', href === '#top' ? window.location.pathname : href);
+        scrollToSelector(href);
+        const details = link.closest('details');
+        if (details) details.removeAttribute('open');
+      };
+      link.addEventListener('click', handler);
+      return { link, handler };
+    });
+
+    const topLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href="/#top"]'));
     const topLinkHandlers = topLinks.map((link) => {
       const handler = (event: MouseEvent) => {
-        const samePage = window.location.pathname === '/';
-        if (!samePage && link.getAttribute('href') === '/#top') return;
+        if (window.location.pathname !== '/') return;
         event.preventDefault();
-        history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+        history.replaceState(null, '', window.location.pathname);
         scrollToTop();
       };
       link.addEventListener('click', handler);
@@ -108,6 +134,7 @@ export default function MotionSystem() {
         settleTimers.forEach((timer) => window.clearTimeout(timer));
         window.removeEventListener('krida:scroll-top', onScrollTopRequest);
         window.removeEventListener('krida:scroll-to', onScrollTargetRequest);
+        homeAnchorHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
         topLinkHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
       };
     }
@@ -117,104 +144,44 @@ export default function MotionSystem() {
       sections.forEach((section) => {
         const label = section.querySelector('.sectionLabel');
         const headings = section.querySelectorAll('h2');
-
-        if (label) {
-          gsap.fromTo(label,
-            { autoAlpha: 0, y: 14 },
-            {
-              autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out',
-              scrollTrigger: { trigger: section, start: 'top 82%', once: true },
-            }
-          );
-        }
-
-        if (headings.length) {
-          gsap.fromTo(headings,
-            { autoAlpha: 0, y: 24 },
-            {
-              autoAlpha: 1, y: 0, duration: 0.72, stagger: 0.08, ease: 'power3.out',
-              scrollTrigger: { trigger: section, start: 'top 76%', once: true },
-            }
-          );
-        }
+        if (label) gsap.fromTo(label, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out', scrollTrigger: { trigger: section, start: 'top 82%', once: true } });
+        if (headings.length) gsap.fromTo(headings, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.72, stagger: 0.08, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 76%', once: true } });
       });
 
       const heroCopy = document.querySelector('.heroCopy');
       if (heroCopy) {
         const items = heroCopy.querySelectorAll('.kicker, h1, p, .circleLink');
-        gsap.fromTo(items,
-          { autoAlpha: 0, y: 24 },
-          { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.11, ease: 'power3.out', delay: 0.08 }
-        );
+        gsap.fromTo(items, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.11, ease: 'power3.out', delay: 0.08 });
       }
 
       const heroMedia = document.querySelector('.videoPlaceholder');
       if (heroMedia && !mobile) {
-        gsap.fromTo(heroMedia,
-          { clipPath: 'inset(0 0 0 12%)' },
-          { clipPath: 'inset(0 0 0 0%)', duration: 1.15, ease: 'power3.out', delay: 0.16 }
-        );
-        gsap.to(heroMedia, {
-          yPercent: 4,
-          ease: 'none',
-          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.7 },
-        });
+        gsap.fromTo(heroMedia, { clipPath: 'inset(0 0 0 12%)' }, { clipPath: 'inset(0 0 0 0%)', duration: 1.15, ease: 'power3.out', delay: 0.16 });
+        gsap.to(heroMedia, { yPercent: 4, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.7 } });
       }
 
       const path = document.querySelector('.intelligencePath');
       if (path) {
         const nodes = path.querySelectorAll('.pathNode');
         const arrows = path.querySelectorAll(':scope > i');
-        gsap.fromTo(nodes,
-          { autoAlpha: 0.35, y: 10 },
-          {
-            autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.16, ease: 'power2.out',
-            scrollTrigger: { trigger: path, start: 'top 78%', once: true },
-          }
-        );
-        gsap.fromTo(arrows,
-          { scaleX: 0, transformOrigin: 'left center', autoAlpha: 0 },
-          {
-            scaleX: 1, autoAlpha: 1, duration: 0.35, stagger: 0.16, ease: 'power2.out',
-            scrollTrigger: { trigger: path, start: 'top 76%', once: true },
-          }
-        );
+        gsap.fromTo(nodes, { autoAlpha: 0.35, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.16, ease: 'power2.out', scrollTrigger: { trigger: path, start: 'top 78%', once: true } });
+        gsap.fromTo(arrows, { scaleX: 0, transformOrigin: 'left center', autoAlpha: 0 }, { scaleX: 1, autoAlpha: 1, duration: 0.35, stagger: 0.16, ease: 'power2.out', scrollTrigger: { trigger: path, start: 'top 76%', once: true } });
       }
 
       gsap.utils.toArray<HTMLElement>('.signalList article').forEach((row, index) => {
-        gsap.fromTo(row,
-          { autoAlpha: 0, x: 18 },
-          {
-            autoAlpha: 1, x: 0, duration: 0.55, delay: index * 0.06, ease: 'power2.out',
-            scrollTrigger: { trigger: row, start: 'top 88%', once: true },
-          }
-        );
+        gsap.fromTo(row, { autoAlpha: 0, x: 18 }, { autoAlpha: 1, x: 0, duration: 0.55, delay: index * 0.06, ease: 'power2.out', scrollTrigger: { trigger: row, start: 'top 88%', once: true } });
       });
 
       gsap.utils.toArray<HTMLElement>('.lawyerCard').forEach((card, index) => {
-        gsap.fromTo(card,
-          { autoAlpha: 0, y: 28 },
-          {
-            autoAlpha: 1, y: 0, duration: 0.65, delay: index * 0.07, ease: 'power3.out',
-            scrollTrigger: { trigger: card, start: 'top 88%', once: true },
-          }
-        );
+        gsap.fromTo(card, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.65, delay: index * 0.07, ease: 'power3.out', scrollTrigger: { trigger: card, start: 'top 88%', once: true } });
       });
 
       const line = document.querySelector<HTMLElement>('.kridaIntelligenceLine');
       const dot = document.querySelector<HTMLElement>('.kridaIntelligenceDot');
       if (line && dot && pathname === '/') {
         gsap.set(line, { scaleY: 0, transformOrigin: 'top center' });
-        gsap.to(line, {
-          scaleY: 1,
-          ease: 'none',
-          scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: 0.35 },
-        });
-        gsap.to(dot, {
-          top: 'calc(100% - 8px)',
-          ease: 'none',
-          scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: 0.35 },
-        });
+        gsap.to(line, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: 0.35 } });
+        gsap.to(dot, { top: 'calc(100% - 8px)', ease: 'none', scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: 0.35 } });
       }
     });
 
@@ -224,6 +191,7 @@ export default function MotionSystem() {
       settleTimers.forEach((timer) => window.clearTimeout(timer));
       window.removeEventListener('krida:scroll-top', onScrollTopRequest);
       window.removeEventListener('krida:scroll-to', onScrollTargetRequest);
+      homeAnchorHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
       topLinkHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
       ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
