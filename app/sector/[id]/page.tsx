@@ -36,7 +36,7 @@ export default async function SectorPage({ params }: { params: Promise<{ id: str
             <div className="matter-list">
               {sector.matters.map((matter, index) => (
                 <div className="matter-row" key={matter}>
-                  <span>{String(index + 1).padStart(2, '0')}</span><strong>{matter}</strong><Link href={`/#issue-navigator`}>↗</Link>
+                  <span>{String(index + 1).padStart(2, '0')}</span><strong>{matter}</strong><Link href="/#navigator">↗</Link>
                 </div>
               ))}
             </div>
