@@ -11,6 +11,7 @@ import './brand.css';
 import './internal-refinement.css';
 import './assets.css';
 import './navigation-qa.css';
+import './legal.css';
 
 const sans = Manrope({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const serif = Newsreader({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
