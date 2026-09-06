@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { issuePrompts, lawyers, sectors, signals } from '@/data/siteData';
 
@@ -62,7 +63,7 @@ export default function HomeExperience() {
               <h2>{activeSector.name}</h2>
               <h3>{activeSector.strapline}</h3>
               <p>{activeSector.summary}</p>
-              <a className="primaryButton" href="#navigator">Explore {activeSector.name} <span>→</span></a>
+              <Link className="primaryButton" href={`/sector/${activeSector.id}`}>Explore {activeSector.name} <span>→</span></Link>
             </div>
             <div className={`sectorVisual sectorVisual--${activeSector.id}`} aria-hidden="true">
               <div className="sectorVisualLabel">{activeSector.matters.map((m) => <span key={m}>{m}</span>)}</div>
@@ -82,19 +83,19 @@ export default function HomeExperience() {
         <div className="intelligencePath">
           <div className="pathNode"><span>Issue</span><strong>{selectedIssue}</strong></div>
           <i>→</i>
-          <div className="pathNode"><span>Sector</span><strong>{issueSector.name}</strong></div>
+          <Link className="pathNode" href={`/sector/${issueSector.id}`}><span>Sector</span><strong>{issueSector.name}</strong></Link>
           <i>→</i>
           <div className="pathNode"><span>People</span><strong>{issueLawyers.map((l) => l.name.split(' ')[0]).join(' · ') || 'Krida team'}</strong></div>
           <i>→</i>
-          <div className="pathNode"><span>Signal</span><strong>{issueSignals[0]?.category || 'Current intelligence'}</strong></div>
+          {issueSignals[0] ? <Link className="pathNode" href={`/insights/${issueSignals[0].id}`}><span>Signal</span><strong>{issueSignals[0].category}</strong></Link> : <div className="pathNode"><span>Signal</span><strong>Current intelligence</strong></div>}
         </div>
       </section>
 
       <section className="section radar" id="radar">
         <div className="sectionLabel light"><span>03</span><i />Regulatory Radar</div>
         <div className="radarGrid">
-          <div className="radarIntro"><h2>Signals that matter.</h2><p>Curated legal and regulatory developments across sport, gaming, IP and commercial sectors.</p><a href="#">View all insights →</a></div>
-          <div className="signalList">{signals.map((signal) => <article key={signal.id}><time>{signal.date}</time><div><span>{signal.category} / {signal.jurisdiction}</span><h3>{signal.title}</h3></div><b>→</b></article>)}</div>
+          <div className="radarIntro"><h2>Signals that matter.</h2><p>Curated legal and regulatory developments across sport, gaming, IP and commercial sectors.</p><span>Editorially reviewed intelligence</span></div>
+          <div className="signalList">{signals.map((signal) => <Link key={signal.id} href={`/insights/${signal.id}`}><article><time>{signal.date}</time><div><span>{signal.category} / {signal.jurisdiction}</span><h3>{signal.title}</h3></div><b>→</b></article></Link>)}</div>
           <div className="radarGlobe" aria-hidden="true"><div className="globe"><i /><i /><i /></div><span>INDIA</span><span>GLOBAL</span><span>MIDDLE EAST</span><span>EUROPE</span><span>ASIA PACIFIC</span></div>
         </div>
       </section>
@@ -102,7 +103,7 @@ export default function HomeExperience() {
       <section className="section sectionLight" id="people">
         <div className="sectionLabel"><span>04</span><i />People in context</div>
         <div className="peopleLead"><h2>The right expertise for what’s next.</h2><p>People are connected to the matters they work across, not presented as isolated biographies.</p></div>
-        <div className="peopleGrid">{lawyers.map((lawyer) => <article className="lawyerCard" key={lawyer.id}><div className="portraitPlaceholder" aria-hidden="true"><span>{lawyer.initials}</span></div><div className="lawyerMeta"><h3>{lawyer.name}</h3><p>{lawyer.role}</p><div className="worksAcross"><span>Works across</span>{lawyer.worksAcross.map((work) => <b key={work}>{work}</b>)}</div><a href="#contact">View profile →</a></div></article>)}</div>
+        <div className="peopleGrid">{lawyers.map((lawyer) => <article className="lawyerCard" key={lawyer.id}><div className="portraitPlaceholder" aria-hidden="true"><span>{lawyer.initials}</span></div><div className="lawyerMeta"><h3>{lawyer.name}</h3><p>{lawyer.role}</p><div className="worksAcross"><span>Works across</span>{lawyer.worksAcross.map((work) => <b key={work}>{work}</b>)}</div><Link href={`/people/${lawyer.id}`}>View profile →</Link></div></article>)}</div>
       </section>
 
       <section className="section contactSection" id="contact">
@@ -110,7 +111,7 @@ export default function HomeExperience() {
         <form onSubmit={(e) => e.preventDefault()}><label>Name<input required /></label><label>Email<input type="email" required /></label><label>Nature of enquiry<select defaultValue="General enquiry"><option>General enquiry</option><option>Sport</option><option>Gaming</option><option>Intellectual Property</option><option>Business</option></select></label><label className="wide">Message<textarea rows={4} /></label><button className="primaryButton wide" type="submit">Send enquiry <span>→</span></button></form>
       </section>
 
-      <footer><div className="brand footerBrand"><span>KRIDA</span><small>LEGAL</small></div><p>Legal intelligence for a moving world.</p><div><a href="#">Disclaimer</a><a href="#">Privacy</a><a href="#">Sitemap</a></div></footer>
+      <footer><div className="brand footerBrand"><span>KRIDA</span><small>LEGAL</small></div><p>Legal intelligence for a moving world.</p><div><span>Disclaimer</span><span>Privacy</span><span>Sitemap</span></div></footer>
     </main>
   );
 }
