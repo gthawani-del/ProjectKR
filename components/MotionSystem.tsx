@@ -14,14 +14,13 @@ export default function MotionSystem() {
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mobile = window.matchMedia('(max-width: 760px)').matches;
-    if (reduced) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
     let lenis: Lenis | null = null;
     let rafId = 0;
 
-    if (!mobile) {
+    if (!reduced && !mobile) {
       lenis = new Lenis({
         duration: 1.05,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -36,6 +35,35 @@ export default function MotionSystem() {
       };
       rafId = requestAnimationFrame(raf);
       lenis.on('scroll', ScrollTrigger.update);
+    }
+
+    const scrollToTop = () => {
+      if (lenis) {
+        lenis.scrollTo(0, { duration: 0.9, force: true, onComplete: () => ScrollTrigger.refresh() });
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: reduced ? 'auto' : 'smooth' });
+      }
+    };
+
+    const onScrollTopRequest = () => scrollToTop();
+    window.addEventListener('krida:scroll-top', onScrollTopRequest);
+
+    const topLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href="#top"]'));
+    const topLinkHandlers = topLinks.map((link) => {
+      const handler = (event: MouseEvent) => {
+        event.preventDefault();
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+        scrollToTop();
+      };
+      link.addEventListener('click', handler);
+      return { link, handler };
+    });
+
+    if (reduced) {
+      return () => {
+        window.removeEventListener('krida:scroll-top', onScrollTopRequest);
+        topLinkHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
+      };
     }
 
     const ctx = gsap.context(() => {
@@ -147,6 +175,8 @@ export default function MotionSystem() {
     ScrollTrigger.refresh();
 
     return () => {
+      window.removeEventListener('krida:scroll-top', onScrollTopRequest);
+      topLinkHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
       ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       if (rafId) cancelAnimationFrame(rafId);
