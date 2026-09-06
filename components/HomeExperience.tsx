@@ -7,6 +7,8 @@ import SiteLogo from '@/components/SiteLogo';
 import { issuePrompts, lawyers, sectors, signals } from '@/data/siteData';
 import { insightImages, peopleImages, sectorImages } from '@/data/imageAssets';
 
+const featuredPeopleIds = ['vidushpat', 'nachiket', 'kartikeya', 'aashita', 'jacob', 'aanya'];
+
 export default function HomeExperience() {
   const [activeSector, setActiveSector] = useState(sectors[0]);
   const [query, setQuery] = useState('');
@@ -19,6 +21,7 @@ export default function HomeExperience() {
 
   const issueLawyers = lawyers.filter((lawyer) => issueSector.lawyerIds.includes(lawyer.id));
   const issueSignals = signals.filter((signal) => issueSector.signalIds.includes(signal.id));
+  const featuredLawyers = featuredPeopleIds.map((id) => lawyers.find((lawyer) => lawyer.id === id)).filter((lawyer): lawyer is (typeof lawyers)[number] => Boolean(lawyer));
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -125,9 +128,10 @@ export default function HomeExperience() {
         {filtered.length > 0 && <div className="searchResults" aria-live="polite">{filtered.map((result) => result.type === 'sector' ? (
           <button key={`sector-${result.id}`} onClick={() => { const sector = sectors.find((item) => item.id === result.id); if (sector) { selectSector(sector); setSelectedIssue(sector.matters[0]); } }}>{result.title}<span>{result.meta}</span></button>
         ) : <Link key={`lawyer-${result.id}`} href={`/people/${result.id}`}>{result.title}<span>{result.meta}</span></Link>)}</div>}
-        <div className="issueChips">{issuePrompts.map((issue) => <button key={issue} className={selectedIssue === issue ? 'active' : ''} onClick={() => setSelectedIssue(issue)}>{issue}</button>)}</div>
+        <div className="issueChips" aria-label="Common legal issues">{issuePrompts.map((issue) => <button key={issue} className={selectedIssue === issue ? 'active' : ''} onClick={() => setSelectedIssue(issue)}>{issue}</button>)}</div>
+        <div className="navigatorSelection" aria-live="polite"><span>Selected issue</span><strong>{selectedIssue}</strong></div>
         <div className="intelligencePath">
-          <div className="pathNode"><span>Issue</span><strong>{selectedIssue}</strong></div><i>→</i>
+          <div className="pathNode pathNode--selected"><span>Issue</span><strong>{selectedIssue}</strong></div><i>→</i>
           <Link className="pathNode" href={`/sector/${issueSector.id}`}><span>Sector</span><strong>{issueSector.name}</strong></Link><i>→</i>
           <div className="pathNode"><span>People</span><strong>{issueLawyers.map((l) => l.name.split(' ')[0]).join(' · ') || 'Krida team'}</strong></div><i>→</i>
           {issueSignals[0] ? <Link className="pathNode" href={`/insights/${issueSignals[0].id}`}><span>Signal</span><strong>{issueSignals[0].category}</strong></Link> : <div className="pathNode"><span>Signal</span><strong>Current intelligence</strong></div>}
@@ -145,13 +149,19 @@ export default function HomeExperience() {
 
       <section className="section sectionLight" id="people">
         <div className="sectionLabel"><span>04</span><i />People in context</div>
-        <div className="peopleLead"><h2>The right expertise for what’s next.</h2><p>People are connected to the matters they work across, not presented as isolated biographies.</p></div>
-        <div className="peopleGrid">{lawyers.map((lawyer) => <article className="lawyerCard" key={lawyer.id}>{peopleImages[lawyer.id] ? <div className="lawyerPortrait"><Image src={peopleImages[lawyer.id]} alt={lawyer.name} fill sizes="(max-width: 768px) 88vw, 28vw" /></div> : <div className="portraitPlaceholder" aria-hidden="true"><span>{lawyer.initials}</span></div>}<div className="lawyerMeta"><h3>{lawyer.name}</h3><p>{lawyer.role}</p><div className="worksAcross"><span>Works across</span>{lawyer.worksAcross.map((work) => <b key={work}>{work}</b>)}</div><Link href={`/people/${lawyer.id}`}>View profile →</Link></div></article>)}</div>
+        <div className="peopleLead"><h2>The right expertise for what’s next.</h2><div><p>People are connected to the matters they work across, not presented as isolated biographies.</p><Link className="peopleDirectoryLink" href="/people">View all people <span>→</span></Link></div></div>
+        <div className="peopleGrid peopleGrid--featured">{featuredLawyers.map((lawyer) => <article className="lawyerCard" key={lawyer.id}>{peopleImages[lawyer.id] ? <div className="lawyerPortrait"><Image src={peopleImages[lawyer.id]} alt={lawyer.name} fill sizes="(max-width: 768px) 100vw, 28vw" /></div> : <div className="portraitPlaceholder portraitPlaceholder--editorial" aria-hidden="true"><span>{lawyer.initials}</span><small>KRIDA / PROFILE</small></div>}<div className="lawyerMeta"><h3>{lawyer.name}</h3><p>{lawyer.role}</p><div className="worksAcross"><span>Works across</span>{lawyer.worksAcross.slice(0, 3).map((work) => <b key={work}>{work}</b>)}</div><Link href={`/people/${lawyer.id}`}>View profile →</Link></div></article>)}</div>
+        <div className="peopleFooterCta"><Link className="primaryButton" href="/people">View all people <span>→</span></Link></div>
       </section>
 
       <section className="section contactSection" id="contact">
-        <div><div className="sectionLabel"><span>05</span><i />Contact</div><h2>Start with the matter.</h2><p>General enquiries only. Submitting an enquiry does not create an advocate–client relationship.</p><p><a href="mailto:contactus@kridalegal.com">contactus@kridalegal.com</a> · +91-11-40122110</p></div>
-        <form onSubmit={submitEnquiry}><label>Name<input name="name" autoComplete="name" required /></label><label>Email<input name="email" type="email" autoComplete="email" required /></label><label>Nature of enquiry<select name="nature" defaultValue="General enquiry"><option>General enquiry</option><option>Sport</option><option>Gaming</option><option>Intellectual Property</option><option>Business</option></select></label><label className="wide">Message<textarea name="message" rows={4} required /></label><button className="primaryButton wide" type="submit">Email enquiry <span>→</span></button></form>
+        <div className="contactIntro"><div className="sectionLabel"><span>05</span><i />Contact</div><h2>Start with the matter.</h2><p>A short intake helps route your enquiry to the relevant team. Submitting an enquiry does not create an advocate–client relationship.</p><p className="contactDirect"><a href="mailto:contactus@kridalegal.com">contactus@kridalegal.com</a><span>+91-11-40122110</span></p></div>
+        <form className="intakeForm" onSubmit={submitEnquiry}>
+          <fieldset className="intakeStep"><legend><span>01</span> Matter type</legend><label>Nature of enquiry<select name="nature" defaultValue="General enquiry"><option>General enquiry</option><option>Sport</option><option>Gaming</option><option>Intellectual Property</option><option>Business</option></select></label></fieldset>
+          <fieldset className="intakeStep"><legend><span>02</span> Short context</legend><label>What are you dealing with?<textarea name="message" rows={5} placeholder="Briefly describe the issue or question." required /></label></fieldset>
+          <fieldset className="intakeStep"><legend><span>03</span> Contact details</legend><div className="intakeIdentity"><label>Name<input name="name" autoComplete="name" required /></label><label>Email<input name="email" type="email" autoComplete="email" required /></label></div></fieldset>
+          <button className="primaryButton intakeSubmit" type="submit">Email enquiry <span>→</span></button>
+        </form>
       </section>
 
       <footer>
