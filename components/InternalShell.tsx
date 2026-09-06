@@ -25,14 +25,14 @@ export default function InternalShell({ children }: { children: React.ReactNode 
             <Link href="/insights">Insights</Link>
             <Link href="/about">About</Link>
             <Link href="/#navigator">Search issues</Link>
-            <Link href="/#contact">Contact</Link>
+            <Link href="/contact">Contact</Link>
           </nav>
         </details>
       </header>
       <div id="main-content" tabIndex={-1}>{children}</div>
       <footer className="internal-footer">
         <div><SiteLogo className="footerLogo" /><span>© 2026 Krida Legal · General information only.</span></div>
-        <nav aria-label="Legal links"><Link href="/#top">Home</Link><Link href="/sectors">Sectors</Link><Link href="/practices">Practice Areas</Link><Link href="/#contact">Contact</Link><span>Privacy</span><span>Terms</span><span>Disclaimer</span></nav>
+        <nav aria-label="Legal links"><Link href="/#top">Home</Link><Link href="/sectors">Sectors</Link><Link href="/practices">Practice Areas</Link><Link href="/contact">Contact</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/disclaimer">Disclaimer</Link><Link href="/sitemap">Sitemap</Link></nav>
       </footer>
     </div>
   );
