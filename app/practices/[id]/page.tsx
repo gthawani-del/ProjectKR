@@ -14,7 +14,7 @@ export default async function PracticePage({params}:{params:Promise<{id:string}>
  const lawyerIds=[...new Set(connected.flatMap((m)=>m.lawyerIds))];
  const relatedSectors=sectors.filter((sector)=>sectorIds.includes(sector.id));
  const relatedLawyers=lawyers.filter((lawyer)=>lawyerIds.includes(lawyer.id));
- const relatedSignals=signals.filter((signal)=>relatedSectors.some((sector)=>sector.signalIds.includes(signal.id)));
+ const relatedSignals=signals.filter((signal)=>connected.some((matter)=>signal.matterIds.includes(matter.id)));
  return <InternalShell><main>
   <section className="internal-hero"><div><div className="internal-kicker">Practice Area</div><h1>{practice.name}</h1><p>{practice.summary}</p></div><aside className="internal-side"><div className="internalHeroMedia"><Image src={practiceImages[practice.id]} alt={`${practice.name} practice area`} fill sizes="(max-width: 768px) 100vw, 38vw" priority /></div><small>Connected sectors</small><div className="tag-list">{relatedSectors.map((sector)=><Link className="tag" href={`/sector/${sector.id}`} key={sector.id}>{sector.name}</Link>)}</div></aside></section>
   <section className="internal-section"><div className="section-grid"><div><div className="section-label">01 / Capabilities</div><h2>What the practice covers.</h2></div><div className="matter-list">{practice.capabilities.map((item,index)=><div className="matter-row" key={item}><span>{String(index+1).padStart(2,'0')}</span><strong>{item}</strong><span>—</span></div>)}</div></div></section>
