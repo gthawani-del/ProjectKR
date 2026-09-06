@@ -10,7 +10,7 @@ export default async function MatterPage({params}:{params:Promise<{id:string}>})
  const sector=sectors.find((item)=>item.id===matter.sectorId);
  const relatedPractices=practices.filter((p)=>matter.practiceIds.includes(p.id));
  const relatedLawyers=lawyers.filter((l)=>matter.lawyerIds.includes(l.id));
- const relatedSignals=sector?signals.filter((signal)=>sector.signalIds.includes(signal.id)):[];
+ const relatedSignals=signals.filter((signal)=>signal.matterIds.includes(matter.id));
  return <InternalShell><main>
   <section className="internal-hero"><div><div className="internal-kicker">Matter / {sector?.name}</div><h1>{matter.name}</h1><p>{matter.intro}</p></div><aside className="internal-side">{sector&&<><small>Sector</small><div className="tag-list"><Link className="tag" href={`/sector/${sector.id}`}>{sector.name}</Link></div></>}<small>Connected practices</small><div className="tag-list">{relatedPractices.map((p)=><Link className="tag" href={`/practices/${p.id}`} key={p.id}>{p.name}</Link>)}</div></aside></section>
   <section className="internal-section"><div className="section-grid"><div><div className="section-label">01 / Scope</div><h2>What this matter can involve.</h2></div><div className="matter-list">{matter.scope.map((item,index)=><div className="matter-row" key={item}><span>{String(index+1).padStart(2,'0')}</span><strong>{item}</strong><span>—</span></div>)}</div></div></section>
