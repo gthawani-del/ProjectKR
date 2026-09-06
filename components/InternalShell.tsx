@@ -7,7 +7,7 @@ export default function InternalShell({ children }: { children: React.ReactNode 
       <header className="internal-nav">
         <SiteLogo className="internal-logo" />
         <nav aria-label="Internal navigation">
-          <Link href="/">Home</Link>
+          <Link href="/#top">Home</Link>
           <Link href="/sectors">Sectors</Link>
           <Link href="/people">People</Link>
           <Link href="/insights">Insights</Link>
@@ -18,7 +18,7 @@ export default function InternalShell({ children }: { children: React.ReactNode 
       <div id="main-content" tabIndex={-1}>{children}</div>
       <footer className="internal-footer">
         <div><SiteLogo className="footerLogo" /><span>© 2026 Krida Legal · General information only.</span></div>
-        <nav aria-label="Legal links"><Link href="/">Home</Link><Link href="/#contact">Contact</Link><span>Privacy</span><span>Terms</span><span>Disclaimer</span></nav>
+        <nav aria-label="Legal links"><Link href="/#top">Home</Link><Link href="/#contact">Contact</Link><span>Privacy</span><span>Terms</span><span>Disclaimer</span></nav>
       </footer>
     </div>
   );
