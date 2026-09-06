@@ -1,8 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import SiteLogo from '@/components/SiteLogo';
 import { issuePrompts, lawyers, sectors, signals } from '@/data/siteData';
+import { insightImages, peopleImages, sectorImages } from '@/data/imageAssets';
 
 export default function HomeExperience() {
   const [activeSector, setActiveSector] = useState(sectors[0]);
@@ -32,9 +35,7 @@ export default function HomeExperience() {
   return (
     <main id="main-content" tabIndex={-1}>
       <header className="siteHeader">
-        <a className="logoLockup" href="#top" aria-label="Krida Legal home">
-          <img src="/brand/krida-legal-logo.svg" alt="Krida Legal" />
-        </a>
+        <SiteLogo className="logoLockup" />
         <nav aria-label="Primary navigation">
           <a href="#sectors">Sectors</a><a href="#navigator">Navigator</a><a href="#radar">Insights</a><a href="#people">People</a>
         </nav>
@@ -48,9 +49,11 @@ export default function HomeExperience() {
           <p>Sport. Gaming. Intellectual Property. Business.</p>
           <a className="circleLink" href="#sectors"><span>Explore</span><b>↓</b></a>
         </div>
-        <div className="videoPlaceholder" role="img" aria-label="Placeholder for Krida Legal cinematic hero video">
-          <div className="videoBadge"><span>Hero film placeholder</span><strong>16:9 desktop · 9:16 mobile</strong></div>
-          <div className="videoGrid" aria-hidden="true" />
+        <div className="heroMedia" aria-label="Krida Legal sectors across sport, gaming, intellectual property and business">
+          <picture>
+            <source media="(max-width: 768px)" srcSet="/images/hero/krida-hero-mobile.webp" />
+            <img src="/images/hero/krida-hero-desktop.webp" alt="Contemporary architectural scene representing Krida Legal's specialist sectors" width="1600" height="900" fetchPriority="high" />
+          </picture>
         </div>
         <div className="heroRail" aria-hidden="true"><span>People</span><span>Business</span><span>Sport</span><span>Ideas</span><span>A fairer tomorrow</span></div>
       </section>
@@ -73,7 +76,8 @@ export default function HomeExperience() {
               <p>{activeSector.summary}</p>
               <Link className="primaryButton" href={`/sector/${activeSector.id}`}>Explore {activeSector.name} <span>→</span></Link>
             </div>
-            <div className={`sectorVisual sectorVisual--${activeSector.id}`} aria-hidden="true">
+            <div className={`sectorVisual sectorVisual--${activeSector.id}`}>
+              <Image src={sectorImages[activeSector.id]} alt={`${activeSector.name} sector`} fill sizes="(max-width: 768px) 100vw, 46vw" className="sectorVisualImage" />
               <div className="sectorVisualLabel">{activeSector.matters.map((m) => <span key={m}>{m}</span>)}</div>
             </div>
           </div>
@@ -103,14 +107,16 @@ export default function HomeExperience() {
         <div className="radarGrid">
           <div className="radarIntro"><h2>Signals that matter.</h2><p>Curated legal and regulatory developments across sport, gaming, IP and commercial sectors.</p><span>Editorially reviewed intelligence</span></div>
           <div className="signalList">{signals.map((signal) => <Link key={signal.id} href={`/insights/${signal.id}`}><article><time>{signal.date}</time><div><span>{signal.category} / {signal.jurisdiction}</span><h3>{signal.title}</h3></div><b>→</b></article></Link>)}</div>
-          <div className="radarGlobe" aria-hidden="true"><div className="globe"><i /><i /><i /></div><span>INDIA</span><span>GLOBAL</span><span>MIDDLE EAST</span><span>EUROPE</span><span>ASIA PACIFIC</span></div>
+          <div className="radarGlobe responsiveMedia">
+            <Image src={insightImages.radar} alt="Regulatory intelligence across India and global markets" fill sizes="(max-width: 768px) 100vw, 32vw" />
+          </div>
         </div>
       </section>
 
       <section className="section sectionLight" id="people">
         <div className="sectionLabel"><span>04</span><i />People in context</div>
         <div className="peopleLead"><h2>The right expertise for what’s next.</h2><p>People are connected to the matters they work across, not presented as isolated biographies.</p></div>
-        <div className="peopleGrid">{lawyers.map((lawyer) => <article className="lawyerCard" key={lawyer.id}><div className="portraitPlaceholder" aria-hidden="true"><span>{lawyer.initials}</span></div><div className="lawyerMeta"><h3>{lawyer.name}</h3><p>{lawyer.role}</p><div className="worksAcross"><span>Works across</span>{lawyer.worksAcross.map((work) => <b key={work}>{work}</b>)}</div><Link href={`/people/${lawyer.id}`}>View profile →</Link></div></article>)}</div>
+        <div className="peopleGrid">{lawyers.map((lawyer) => <article className="lawyerCard" key={lawyer.id}>{peopleImages[lawyer.id] ? <div className="lawyerPortrait"><Image src={peopleImages[lawyer.id]} alt={lawyer.name} fill sizes="(max-width: 768px) 88vw, 28vw" /></div> : <div className="portraitPlaceholder" aria-hidden="true"><span>{lawyer.initials}</span></div>}<div className="lawyerMeta"><h3>{lawyer.name}</h3><p>{lawyer.role}</p><div className="worksAcross"><span>Works across</span>{lawyer.worksAcross.map((work) => <b key={work}>{work}</b>)}</div><Link href={`/people/${lawyer.id}`}>View profile →</Link></div></article>)}</div>
       </section>
 
       <section className="section contactSection" id="contact">
@@ -119,7 +125,7 @@ export default function HomeExperience() {
       </section>
 
       <footer>
-        <a className="footerLogo" href="#top" aria-label="Krida Legal home"><img src="/brand/krida-legal-logo.svg" alt="Krida Legal" /></a>
+        <SiteLogo className="footerLogo" />
         <p>Legal intelligence for a moving world.</p><div><span>Disclaimer</span><span>Privacy</span><span>Sitemap</span></div>
       </footer>
     </main>
