@@ -12,12 +12,16 @@ export default function BackToTop() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const goTop = () => {
+    window.dispatchEvent(new Event('krida:scroll-top'));
+  };
+
   return (
     <button
       className={`backToTop${visible ? ' isVisible' : ''}`}
       type="button"
       aria-label="Back to top"
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      onClick={goTop}
     >
       <span>↑</span><b>Top</b>
     </button>
