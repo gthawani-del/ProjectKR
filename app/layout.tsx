@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { Manrope, Newsreader } from 'next/font/google';
 import MotionSystem from '@/components/MotionSystem';
+import BackToTop from '@/components/BackToTop';
 import './globals.css';
 import './internal.css';
 import './motion.css';
 import './qa.css';
 import './refinement.css';
-import './final-pass.css';
+import './brand.css';
 
 const sans = Manrope({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const serif = Newsreader({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <a className="skipLink" href="#main-content">Skip to main content</a>
         <MotionSystem />
         {children}
+        <BackToTop />
       </body>
     </html>
   );
