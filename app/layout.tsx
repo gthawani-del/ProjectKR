@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Manrope, Newsreader } from 'next/font/google';
 import MotionSystem from '@/components/MotionSystem';
 import BackToTop from '@/components/BackToTop';
@@ -12,6 +12,7 @@ import './internal-refinement.css';
 import './assets.css';
 import './navigation-qa.css';
 import './legal.css';
+import './homepage-qa.css';
 
 const sans = Manrope({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const serif = Newsreader({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
@@ -20,6 +21,12 @@ export const metadata: Metadata = {
   title: 'Krida Legal | Legal intelligence for sport, gaming, IP and business',
   description: 'Krida Legal provides specialist legal advice across sport, gaming, intellectual property and commercial matters.',
   metadataBase: new URL('https://kridalegal.com'),
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
