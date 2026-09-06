@@ -20,7 +20,7 @@ export default async function LawyerPage({ params }: { params: Promise<{ id: str
   const relatedPracticeIds = [...new Set(relatedMatters.flatMap((matter) => matter.practiceIds))];
   const relatedSectors = sectors.filter((sector) => relatedSectorIds.includes(sector.id));
   const relatedPractices = practices.filter((practice) => relatedPracticeIds.includes(practice.id));
-  const relatedSignals = signals.filter((signal) => relatedSectors.some((sector) => sector.signalIds.includes(signal.id)));
+  const relatedSignals = signals.filter((signal) => relatedMatters.some((matter) => signal.matterIds.includes(matter.id)));
 
   return (
     <InternalShell>
