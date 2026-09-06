@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import SiteLogo from '@/components/SiteLogo';
 import { issuePrompts, lawyers, sectors, signals } from '@/data/siteData';
 import { insightImages, peopleImages, sectorImages } from '@/data/imageAssets';
@@ -39,6 +39,18 @@ export default function HomeExperience() {
     });
   };
 
+  const submitEnquiry = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get('name') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const nature = String(data.get('nature') || 'General enquiry');
+    const message = String(data.get('message') || '').trim();
+    const subject = encodeURIComponent(`Website enquiry: ${nature}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nNature of enquiry: ${nature}\n\n${message}`);
+    window.location.href = `mailto:contactus@kridalegal.com?subject=${subject}&body=${body}`;
+  };
+
   return (
     <main id="main-content" tabIndex={-1}>
       <header className="siteHeader">
@@ -47,6 +59,19 @@ export default function HomeExperience() {
           <a href="#sectors">Sectors</a><a href="#navigator">Navigator</a><a href="#radar">Insights</a><a href="#people">People</a>
         </nav>
         <a className="headerAction" href="#contact">Contact</a>
+        <details className="mobileNav homeMobileNav">
+          <summary aria-label="Open navigation"><span>Menu</span><b aria-hidden="true">+</b></summary>
+          <nav aria-label="Mobile navigation">
+            <a href="#top">Home</a>
+            <a href="#sectors">Sectors</a>
+            <a href="#navigator">Issue Navigator</a>
+            <Link href="/practices">Practice Areas</Link>
+            <a href="#radar">Insights</a>
+            <a href="#people">People</a>
+            <Link href="/about">About</Link>
+            <a href="#contact">Contact</a>
+          </nav>
+        </details>
       </header>
 
       <section className="hero" id="top">
@@ -114,9 +139,7 @@ export default function HomeExperience() {
         <div className="radarGrid">
           <div className="radarIntro"><h2>Signals that matter.</h2><p>Curated legal and regulatory developments across sport, gaming, IP and commercial sectors.</p><span>Editorially reviewed intelligence</span></div>
           <div className="signalList">{signals.map((signal) => <Link key={signal.id} href={`/insights/${signal.id}`}><article><time>{signal.date}</time><div><span>{signal.category} / {signal.jurisdiction}</span><h3>{signal.title}</h3></div><b>→</b></article></Link>)}</div>
-          <div className="radarGlobe responsiveMedia">
-            <Image src={insightImages.radar} alt="Regulatory intelligence across India and global markets" fill sizes="(max-width: 768px) 100vw, 32vw" />
-          </div>
+          <div className="radarGlobe responsiveMedia"><Image src={insightImages.radar} alt="Regulatory intelligence across India and global markets" fill sizes="(max-width: 768px) 100vw, 32vw" /></div>
         </div>
       </section>
 
@@ -127,13 +150,13 @@ export default function HomeExperience() {
       </section>
 
       <section className="section contactSection" id="contact">
-        <div><div className="sectionLabel"><span>05</span><i />Contact</div><h2>Start with the matter.</h2><p>General enquiries only. Submitting an enquiry does not create an advocate–client relationship.</p></div>
-        <form onSubmit={(e) => e.preventDefault()}><label>Name<input required /></label><label>Email<input type="email" required /></label><label>Nature of enquiry<select defaultValue="General enquiry"><option>General enquiry</option><option>Sport</option><option>Gaming</option><option>Intellectual Property</option><option>Business</option></select></label><label className="wide">Message<textarea rows={4} /></label><button className="primaryButton wide" type="submit">Send enquiry <span>→</span></button></form>
+        <div><div className="sectionLabel"><span>05</span><i />Contact</div><h2>Start with the matter.</h2><p>General enquiries only. Submitting an enquiry does not create an advocate–client relationship.</p><p><a href="mailto:contactus@kridalegal.com">contactus@kridalegal.com</a> · +91-11-40122110</p></div>
+        <form onSubmit={submitEnquiry}><label>Name<input name="name" autoComplete="name" required /></label><label>Email<input name="email" type="email" autoComplete="email" required /></label><label>Nature of enquiry<select name="nature" defaultValue="General enquiry"><option>General enquiry</option><option>Sport</option><option>Gaming</option><option>Intellectual Property</option><option>Business</option></select></label><label className="wide">Message<textarea name="message" rows={4} required /></label><button className="primaryButton wide" type="submit">Email enquiry <span>→</span></button></form>
       </section>
 
       <footer>
         <SiteLogo className="footerLogo" />
-        <p>Legal intelligence for a moving world.</p><div><span>Disclaimer</span><span>Privacy</span><span>Sitemap</span></div>
+        <p>Legal intelligence for a moving world.</p><div><Link href="/disclaimer">Disclaimer</Link><Link href="/privacy">Privacy</Link><Link href="/sitemap">Sitemap</Link></div>
       </footer>
     </main>
   );
