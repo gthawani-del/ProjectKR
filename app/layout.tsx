@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Manrope, Newsreader } from 'next/font/google';
+import MotionSystem from '@/components/MotionSystem';
 import './globals.css';
 import './internal.css';
+import './motion.css';
 
 const sans = Manrope({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const serif = Newsreader({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
@@ -15,7 +17,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
-      <body>{children}</body>
+      <body>
+        <MotionSystem />
+        {children}
+      </body>
     </html>
   );
 }
