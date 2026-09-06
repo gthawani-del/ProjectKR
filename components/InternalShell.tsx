@@ -4,7 +4,9 @@ export default function InternalShell({ children }: { children: React.ReactNode 
   return (
     <div className="internal-page">
       <header className="internal-nav">
-        <Link className="internal-brand" href="/">KRIDA LEGAL</Link>
+        <Link className="internal-logo" href="/" aria-label="Krida Legal home">
+          <img src="/brand/krida-legal-logo.svg" alt="Krida Legal" />
+        </Link>
         <nav aria-label="Internal navigation">
           <Link href="/">Home</Link>
           <Link href="/sector/sport">Sectors</Link>
@@ -15,6 +17,7 @@ export default function InternalShell({ children }: { children: React.ReactNode 
       </header>
       <div id="main-content" tabIndex={-1}>{children}</div>
       <footer className="internal-footer">
+        <Link className="internal-footer-logo" href="/" aria-label="Krida Legal home"><img src="/brand/krida-legal-logo.svg" alt="Krida Legal" /></Link>
         <div>© 2026 Krida Legal · General information only.</div>
         <nav aria-label="Legal links">
           <Link href="/">Home</Link>
