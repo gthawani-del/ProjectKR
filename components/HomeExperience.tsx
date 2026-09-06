@@ -32,6 +32,13 @@ export default function HomeExperience() {
     return [...sectorResults, ...lawyerResults].slice(0, 8);
   }, [query]);
 
+  const selectSector = (sector: typeof sectors[number]) => {
+    setActiveSector(sector);
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new CustomEvent('krida:scroll-to', { detail: { selector: '#sectors' } }));
+    });
+  };
+
   return (
     <main id="main-content" tabIndex={-1}>
       <header className="siteHeader">
@@ -63,7 +70,7 @@ export default function HomeExperience() {
         <div className="sectorLayout">
           <div className="sectorIndex" role="tablist" aria-label="Krida sectors">
             {sectors.map((sector, index) => (
-              <button key={sector.id} id={`sector-tab-${sector.id}`} className={activeSector.id === sector.id ? 'active' : ''} onClick={() => setActiveSector(sector)} role="tab" aria-controls="sector-panel" aria-selected={activeSector.id === sector.id}>
+              <button key={sector.id} id={`sector-tab-${sector.id}`} className={activeSector.id === sector.id ? 'active' : ''} onClick={() => selectSector(sector)} role="tab" aria-controls="sector-panel" aria-selected={activeSector.id === sector.id}>
                 <span>{String(index + 1).padStart(2, '0')}</span>{sector.name}
               </button>
             ))}
@@ -91,7 +98,7 @@ export default function HomeExperience() {
           <label className="searchBox"><span>Search issues, sectors or lawyers</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="e.g. fantasy gaming, sponsorship, trademark" /></label>
         </div>
         {filtered.length > 0 && <div className="searchResults" aria-live="polite">{filtered.map((result) => result.type === 'sector' ? (
-          <button key={`sector-${result.id}`} onClick={() => { const sector = sectors.find((item) => item.id === result.id); if (sector) { setActiveSector(sector); setSelectedIssue(sector.matters[0]); } }}>{result.title}<span>{result.meta}</span></button>
+          <button key={`sector-${result.id}`} onClick={() => { const sector = sectors.find((item) => item.id === result.id); if (sector) { selectSector(sector); setSelectedIssue(sector.matters[0]); } }}>{result.title}<span>{result.meta}</span></button>
         ) : <Link key={`lawyer-${result.id}`} href={`/people/${result.id}`}>{result.title}<span>{result.meta}</span></Link>)}</div>}
         <div className="issueChips">{issuePrompts.map((issue) => <button key={issue} className={selectedIssue === issue ? 'active' : ''} onClick={() => setSelectedIssue(issue)}>{issue}</button>)}</div>
         <div className="intelligencePath">
