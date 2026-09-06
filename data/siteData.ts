@@ -1,6 +1,6 @@
 export type Sector = { id:string; name:string; strapline:string; summary:string; matters:string[]; lawyerIds:string[]; signalIds:string[] };
 export type Lawyer = { id:string; name:string; role:string; initials:string; worksAcross:string[] };
-export type Signal = { id:string; date:string; jurisdiction:string; category:string; title:string };
+export type Signal = { id:string; date:string; jurisdiction:string; category:string; title:string; matterIds:string[] };
 
 export const sectors: Sector[] = [
 {id:'sport',name:'Sport',strapline:'Governance. Rights. Disputes. Growth.',summary:'Legal advice for leagues, federations, athletes, rights-holders and commercial partners operating across a fast-moving sports ecosystem.',matters:['Sports governance','Athlete contracts','Sponsorship','Media rights','Disputes'],lawyerIds:['vidushpat','kartikeya','aanya','neil','aashita','nachiket'],signalIds:['sports-agents']},
@@ -27,9 +27,9 @@ export const lawyers: Lawyer[] = [
 ];
 
 export const signals: Signal[] = [
-{id:'gaming-rules',date:'05 SEP 2026',jurisdiction:'INDIA',category:'GAMING',title:'Draft framework on online gaming released for public comment'},
-{id:'sports-agents',date:'03 SEP 2026',jurisdiction:'GLOBAL',category:'SPORT',title:'Regulatory developments affecting player-agent frameworks'},
-{id:'ip-ruling',date:'01 SEP 2026',jurisdiction:'INDIA',category:'IP',title:'Recent court developments affecting interim relief in trademark disputes'}
+{id:'gaming-rules',date:'05 SEP 2026',jurisdiction:'INDIA',category:'GAMING',title:'Draft framework on online gaming released for public comment',matterIds:['gaming-regulation','platform-structuring','payments']},
+{id:'sports-agents',date:'03 SEP 2026',jurisdiction:'GLOBAL',category:'SPORT',title:'Regulatory developments affecting player-agent frameworks',matterIds:['sports-governance','athlete-contracts','sponsorship']},
+{id:'ip-ruling',date:'01 SEP 2026',jurisdiction:'INDIA',category:'IP',title:'Recent court developments affecting interim relief in trademark disputes',matterIds:['trademark-strategy','ip-enforcement']}
 ];
 
 export const issuePrompts=['Gaming regulation','Sports governance','Sponsorship & media rights','Trademark / IP','Commercial agreement','Dispute'];
