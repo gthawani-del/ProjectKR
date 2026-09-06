@@ -1,0 +1,108 @@
+/* Rendered QA refinement pass */
+
+/* Desktop typography and rhythm */
+body{font-size:19px;line-height:1.58}
+.siteHeader{height:112px}
+.siteHeader nav,.headerAction{font-size:15px}
+.brand span{font-size:30px}.brand small{font-size:11px}
+.hero{min-height:86vh;grid-template-columns:minmax(460px,44%) minmax(0,56%)}
+.heroCopy{padding-top:170px;padding-bottom:88px}
+.kicker,.sectionLabel{font-size:13px}
+.hero h1{font-size:clamp(72px,6.7vw,122px);line-height:.9;letter-spacing:-.06em;max-width:760px}
+.heroCopy>p{font-size:25px;line-height:1.35}
+.videoPlaceholder{min-height:86vh}
+.section{padding-top:128px;padding-bottom:128px}
+.sectionLabel{margin-bottom:42px}
+.sectorLayout{grid-template-columns:300px minmax(0,1fr);gap:72px}
+.sectorIndex button{font-size:32px;padding:15px 0}
+.sectorIndex button span{font-size:12px}
+.sectorDetail{gap:64px}
+.sectorDetail h2,.navigator h2,.radar h2,.peopleLead h2,.contactSection h2{font-size:clamp(58px,4.7vw,74px)}
+.sectorDetail h3{font-size:27px;line-height:1.16}
+.sectorDetail p,.navigatorIntro p,.peopleLead p,.contactSection p,.radarIntro p{font-size:18px;line-height:1.65}
+.primaryButton{font-size:15px;padding:15px 22px;min-height:50px}
+.sectorVisualLabel{font-size:12px;gap:15px}
+.navigatorIntro{grid-template-columns:.9fr 1.1fr;gap:96px}
+.searchBox{font-size:13px}.searchBox input{font-size:20px;padding:17px 0}
+.issueChips{margin:48px 0 44px;gap:12px}.issueChips button{font-size:14px;padding:11px 16px}
+.intelligencePath{padding:38px 0;gap:24px}.pathNode span{font-size:12px}.pathNode strong{font-size:22px}
+.radarGrid{grid-template-columns:.76fr 1.25fr .62fr;gap:70px}.signalList article{grid-template-columns:120px 1fr 28px;padding:28px 0}.signalList time,.signalList span{font-size:12px}.signalList h3{font-size:20px;line-height:1.42}.radarIntro>span{display:inline-block;margin-top:24px;font-size:13px;letter-spacing:.08em;color:#c0d2e5}
+
+/* People: editorial, less card-like */
+.peopleLead{grid-template-columns:1.05fr .75fr;gap:80px;margin-bottom:66px}
+.peopleGrid{grid-template-columns:1.15fr .9fr .9fr;gap:34px;align-items:start}
+.lawyerCard{border:0;background:transparent;position:relative}
+.lawyerCard:nth-child(2){margin-top:62px}.lawyerCard:nth-child(3){margin-top:118px}
+.portraitPlaceholder{aspect-ratio:4/4.7;min-height:0;padding:28px;border-radius:0}
+.lawyerCard:first-child .portraitPlaceholder{aspect-ratio:4/4.35}
+.portraitPlaceholder span{font-size:88px}
+.lawyerMeta{padding:24px 2px 0;border-top:1px solid var(--line)}
+.lawyerMeta h3{font-size:34px;line-height:1.05}.lawyerMeta p{font-size:15px;margin:7px 0 24px}.worksAcross{gap:8px}.worksAcross span{font-size:12px}.worksAcross b{font-size:12px;padding:7px 10px;background:#fff}.lawyerMeta a{font-size:15px}
+.lawyerCard:hover{transform:none;box-shadow:none}.lawyerCard:hover .portraitPlaceholder{filter:brightness(1.025)}
+
+/* Contact */
+.contactSection{grid-template-columns:.85fr 1.15fr;gap:100px}.contactSection form{gap:20px}.contactSection label{font-size:13px}.contactSection input,.contactSection select,.contactSection textarea{font-size:17px;padding:15px 16px;min-height:52px}.contactSection textarea{min-height:150px}
+footer{font-size:14px;padding-top:50px;padding-bottom:50px}
+
+@media(max-width:1200px){
+  .hero{grid-template-columns:49% 51%}
+  .hero h1{font-size:clamp(64px,7.7vw,94px)}
+  .sectorLayout{grid-template-columns:230px 1fr;gap:48px}
+  .sectorDetail{grid-template-columns:1fr;gap:36px}
+  .radarGrid{grid-template-columns:.8fr 1.2fr}.radarGlobe{display:none}
+  .peopleGrid{grid-template-columns:repeat(3,1fr);gap:24px}.lawyerCard:nth-child(2){margin-top:38px}.lawyerCard:nth-child(3){margin-top:76px}
+}
+
+/* Mobile is a separate composition, not a compressed desktop layout */
+@media(max-width:760px){
+  body{font-size:18px;line-height:1.6}
+  .siteHeader{height:74px;width:calc(100% - 32px);grid-template-columns:1fr auto;align-items:center}
+  .siteHeader nav{display:none}.headerAction{font-size:14px}
+  .brand span{font-size:22px}.brand small{font-size:9px;margin-top:7px}
+  .hero{display:flex;flex-direction:column;min-height:auto;padding-top:74px;background:linear-gradient(180deg,#f7fbff 0%,#edf7ff 100%)}
+  .heroCopy{order:1;padding:54px 20px 36px;min-height:0;display:block}
+  .videoPlaceholder{order:2;min-height:0;height:auto;aspect-ratio:4/4.7;margin:0 16px 28px;border-radius:0}
+  .videoPlaceholder:before{left:-30%;bottom:-9%;height:62%}.videoPlaceholder:after{height:68%;width:30%}
+  .videoBadge{right:14px;bottom:14px;padding:12px 14px;font-size:10px}.videoBadge strong{font-size:9px}
+  .kicker{font-size:11px;line-height:1.45;letter-spacing:.17em;margin-bottom:20px;max-width:290px}
+  .hero h1{font-size:clamp(50px,15.3vw,68px);line-height:.91;letter-spacing:-.06em;max-width:350px}
+  .heroCopy>p{font-size:18px;line-height:1.45;margin-top:20px;max-width:330px}
+  .circleLink{margin-top:26px;font-size:15px}.circleLink b{width:48px;height:48px}
+  .heroRail{display:none}
+
+  .section{padding:76px 20px}
+  .sectionLabel{font-size:11px;margin-bottom:28px;gap:11px}.sectionLabel i{width:26px}
+  .sectorLayout{display:block}
+  .sectorIndex{display:flex;overflow-x:auto;gap:8px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 18px;margin:0 -20px 30px;padding-left:20px;padding-right:20px;scrollbar-width:none;scroll-snap-type:x proximity}
+  .sectorIndex::-webkit-scrollbar{display:none}
+  .sectorIndex button{flex:0 0 auto;display:flex;gap:7px;align-items:baseline;font-size:16px;padding:10px 13px;border:1px solid var(--line);border-radius:999px;scroll-snap-align:start;white-space:nowrap}
+  .sectorIndex button span{font-size:10px}.sectorIndex button.active{background:var(--blue-soft);border-color:#9cc7ff;color:var(--blue)}
+  .sectorIndex button:before{display:none}
+  .sectorDetail{display:flex;flex-direction:column;gap:28px}
+  .sectorDetail h2{font-size:52px;margin-bottom:10px}.sectorDetail h3{font-size:22px;line-height:1.2;max-width:310px}.sectorDetail p{font-size:17px;line-height:1.65}.sectorVisual{min-height:0;aspect-ratio:4/3.35}.sectorVisualLabel{font-size:10px;right:16px;gap:9px}
+  .primaryButton{font-size:14px;min-height:48px}
+
+  .navigator{padding-top:80px;padding-bottom:84px}
+  .navigatorIntro{display:block}.navigator h2,.radar h2,.peopleLead h2,.contactSection h2{font-size:48px;line-height:.98}
+  .navigatorIntro p,.radarIntro p,.peopleLead p,.contactSection p{font-size:17px;line-height:1.62}
+  .searchBox{margin-top:38px;font-size:11px}.searchBox input{font-size:18px;min-height:50px}
+  .searchResults{grid-template-columns:1fr;margin-top:18px}.searchResults button,.searchResults a{font-size:16px;padding:16px}
+  .issueChips{display:flex;flex-wrap:nowrap;overflow-x:auto;margin:30px -20px 32px;padding:0 20px 8px;scrollbar-width:none}.issueChips::-webkit-scrollbar{display:none}.issueChips button{flex:0 0 auto;font-size:13px;white-space:nowrap}
+  .intelligencePath{display:grid;grid-template-columns:26px 1fr;gap:0 15px;padding:8px 0 0;border-bottom:0;border-top:1px solid rgba(255,255,255,.2);position:relative;overflow:visible}
+  .intelligencePath:after{content:"";position:absolute;left:12px;top:34px;bottom:32px;width:1px;background:linear-gradient(var(--blue),rgba(47,128,255,.2))}
+  .intelligencePath>.pathNode{grid-column:2;padding:22px 0 20px;background:none;border-bottom:1px solid rgba(255,255,255,.12)}
+  .intelligencePath>i{grid-column:1;grid-row:auto;align-self:start;justify-self:center;font-size:0;width:9px;height:9px;border-radius:50%;background:var(--blue);margin-top:29px;z-index:2}
+  .pathNode span{font-size:11px}.pathNode strong{font-size:20px;line-height:1.25}
+
+  .radar{padding-top:78px}.radarGrid{display:block}.radarIntro{margin-bottom:36px}.radarIntro>span{font-size:12px;margin-top:18px}.radarGlobe{display:none!important}.signalList article{grid-template-columns:86px 1fr 20px;gap:14px;padding:22px 0}.signalList time{font-size:10px;line-height:1.4}.signalList span{font-size:10px}.signalList h3{font-size:17px;line-height:1.42}.signalList b{font-size:18px}
+
+  #people{padding-top:82px;padding-bottom:84px}.peopleLead{display:block;margin-bottom:40px}.peopleLead p{margin-top:22px;color:#66788c}
+  .peopleGrid{display:block}.lawyerCard,.lawyerCard:nth-child(2),.lawyerCard:nth-child(3){margin:0 0 54px;border:0}.lawyerCard:last-child{margin-bottom:0}.portraitPlaceholder,.lawyerCard:first-child .portraitPlaceholder{aspect-ratio:4/3.6;min-height:0}.portraitPlaceholder span{font-size:70px}.lawyerMeta{padding-top:18px}.lawyerMeta h3{font-size:30px}.lawyerMeta p{font-size:15px}.worksAcross b{font-size:12px;padding:7px 9px}.lawyerMeta a{font-size:15px;display:inline-flex;align-items:center;min-height:44px}
+
+  .contactSection{display:block;padding-top:76px;padding-bottom:76px}.contactSection>div{margin-bottom:38px}.contactSection form{grid-template-columns:1fr;gap:18px}.contactSection label{font-size:12px}.contactSection input,.contactSection select,.contactSection textarea{font-size:17px;min-height:54px;padding:15px}.contactSection .wide{grid-column:auto}.contactSection textarea{min-height:136px}.contactSection button{width:100%;min-height:52px}
+  footer{display:block;padding:36px 20px;font-size:13px}.footerBrand+p{text-align:left;margin:24px 0}.footerBrand+p+div{justify-content:flex-start;flex-wrap:wrap;gap:16px 22px}
+}
+
+@media(max-width:390px){
+  .hero h1{font-size:49px}.navigator h2,.radar h2,.peopleLead h2,.contactSection h2{font-size:43px}.sectorDetail h2{font-size:48px}
+}
