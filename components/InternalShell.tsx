@@ -15,6 +15,19 @@ export default function InternalShell({ children }: { children: React.ReactNode 
           <Link href="/about">About</Link>
         </nav>
         <Link className="internal-search" href="/#navigator">Search issues</Link>
+        <details className="mobileNav">
+          <summary aria-label="Open navigation"><span>Menu</span><b aria-hidden="true">+</b></summary>
+          <nav aria-label="Mobile navigation">
+            <Link href="/#top">Home</Link>
+            <Link href="/sectors">Sectors</Link>
+            <Link href="/practices">Practice Areas</Link>
+            <Link href="/people">People</Link>
+            <Link href="/insights">Insights</Link>
+            <Link href="/about">About</Link>
+            <Link href="/#navigator">Search issues</Link>
+            <Link href="/#contact">Contact</Link>
+          </nav>
+        </details>
       </header>
       <div id="main-content" tabIndex={-1}>{children}</div>
       <footer className="internal-footer">
