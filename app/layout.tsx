@@ -4,6 +4,7 @@ import MotionSystem from '@/components/MotionSystem';
 import './globals.css';
 import './internal.css';
 import './motion.css';
+import './qa.css';
 
 const sans = Manrope({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const serif = Newsreader({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
       <body>
+        <a className="skipLink" href="#main-content">Skip to main content</a>
         <MotionSystem />
         {children}
       </body>
