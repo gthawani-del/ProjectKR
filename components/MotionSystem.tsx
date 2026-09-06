@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -153,8 +153,6 @@ export default function MotionSystem() {
       lenis?.destroy();
     };
   }, [pathname]);
-
-  if (pathname !== '/') return null;
 
   return (
     <div className="kridaIntelligenceTrack" aria-hidden="true">
