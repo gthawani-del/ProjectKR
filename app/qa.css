@@ -1,5 +1,6 @@
 .skipLink{position:fixed;left:16px;top:16px;z-index:1000;transform:translateY(-160%);background:#fff;color:#06182b;border:2px solid #2f80ff;padding:10px 14px;font-size:14px;font-weight:700;transition:transform .18s ease}.skipLink:focus{transform:translateY(0)}
 :where(a,button,input,select,textarea):focus-visible{outline:3px solid #2f80ff;outline-offset:3px}
 main{scroll-margin-top:24px}
+.searchResults>a{border:0;background:#0c2238;color:#fff;padding:18px;text-align:left;display:grid;gap:4px}.searchResults>a span{font-size:12px;color:#93a6ba}.searchResults>a:hover,.searchResults>a:focus-visible,.searchResults button:hover,.searchResults button:focus-visible{background:#12304d}
 @media(max-width:760px){:where(a,button,input,select,textarea){min-height:44px}.siteHeader nav a,.internal-nav nav a{display:inline-flex;align-items:center}.headerAction,.internal-search{display:inline-flex;align-items:center}}
 @media(prefers-reduced-motion:reduce){.skipLink{transition:none}}
