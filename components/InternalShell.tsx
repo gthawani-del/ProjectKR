@@ -11,9 +11,9 @@ export default function InternalShell({ children }: { children: React.ReactNode 
           <Link href="/people/vidushpat">People</Link>
           <Link href="/insights/gaming-rules">Insights</Link>
         </nav>
-        <Link className="internal-search" href="/#issue-navigator">Search issues</Link>
+        <Link className="internal-search" href="/#navigator">Search issues</Link>
       </header>
-      {children}
+      <div id="main-content" tabIndex={-1}>{children}</div>
       <footer className="internal-footer">
         <div>© 2026 Krida Legal · General information only.</div>
         <nav aria-label="Legal links">
