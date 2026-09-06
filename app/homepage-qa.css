@@ -1,0 +1,108 @@
+/* Homepage QA pass: mobile width, featured people, navigator hierarchy and intake contact */
+
+/* A. Defensive viewport/layout rules */
+html,body{width:100%;max-width:100%;overflow-x:clip}
+body{min-width:0}
+#main-content,.hero,.section,.siteHeader,.sectorLayout,.sectorDetail,.navigatorIntro,.radarGrid,.peopleLead,.peopleGrid,.contactSection{min-width:0;max-width:100%}
+img,picture,video,canvas,svg{max-width:100%}
+.heroMedia,.sectorVisual,.radarGlobe,.lawyerPortrait,.portraitPlaceholder{min-width:0}
+
+/* E. Navigator hierarchy */
+.navigator{padding-top:96px;padding-bottom:96px}
+.navigatorIntro{align-items:end;gap:64px}
+.navigatorIntro>div{max-width:620px}
+.searchBox{margin:0}
+.issueChips{margin:34px 0 24px;gap:9px;opacity:.82}
+.issueChips button{padding:9px 13px;font-size:13px;background:transparent;border-color:rgba(255,255,255,.18)}
+.issueChips button.active{opacity:1;background:#fff;color:#06182b;border-color:#fff}
+.navigatorSelection{display:flex;align-items:center;gap:16px;padding:14px 0 16px;border-top:1px solid rgba(255,255,255,.16);color:#fff}
+.navigatorSelection span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#91acd0}
+.navigatorSelection strong{font-size:17px;font-weight:560}
+.intelligencePath{margin-top:0;padding:26px 0 0;border-top:0}
+.pathNode--selected{background:rgba(47,128,255,.08)}
+
+/* B/C/D. Homepage people should preview, not become the directory */
+.peopleLead{align-items:end;margin-bottom:48px}
+.peopleLead>div{max-width:520px}
+.peopleDirectoryLink{display:inline-flex;align-items:center;gap:12px;margin-top:18px;min-height:44px;font-size:15px;color:#1976ff}
+.peopleGrid--featured{grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 28px}
+.peopleGrid--featured .lawyerCard,.peopleGrid--featured .lawyerCard:nth-child(2),.peopleGrid--featured .lawyerCard:nth-child(3){margin-top:0}
+.peopleGrid--featured .lawyerPortrait,.peopleGrid--featured .portraitPlaceholder{aspect-ratio:4/4.6}
+.portraitPlaceholder--editorial{position:relative;display:flex;align-items:flex-end;justify-content:flex-start;padding:24px;background:linear-gradient(155deg,#102d47 0%,#071a2e 72%,#050e18 100%);color:#fff;overflow:hidden}
+.portraitPlaceholder--editorial:before{content:"";position:absolute;inset:18px;border:1px solid rgba(255,255,255,.12);pointer-events:none}
+.portraitPlaceholder--editorial:after{content:"";position:absolute;left:24px;top:24px;width:44px;height:2px;background:#2f80ff}
+.portraitPlaceholder--editorial span{position:relative;z-index:1;font-family:var(--font-serif);font-size:clamp(48px,5vw,74px);line-height:.8;color:#dcecff}
+.portraitPlaceholder--editorial small{position:absolute;right:24px;top:24px;z-index:1;font-size:9px;letter-spacing:.16em;color:#8ba7c2}
+.peopleGrid--featured .worksAcross b{font-size:12px}
+.peopleFooterCta{display:flex;justify-content:flex-end;margin-top:44px}
+
+/* E. Intake-style contact */
+.contactSection{align-items:start;grid-template-columns:.78fr 1.22fr;gap:84px}
+.contactIntro{position:sticky;top:120px}
+.contactDirect{display:grid;gap:4px;margin-top:28px!important;font-size:15px!important}
+.contactDirect a{color:#1976ff}
+.contactDirect span{color:#60758a}
+.intakeForm{display:grid!important;grid-template-columns:1fr!important;gap:0!important;border-top:1px solid rgba(7,26,51,.16)}
+.intakeStep{display:grid;grid-template-columns:180px 1fr;gap:24px;margin:0;padding:26px 0;border:0;border-bottom:1px solid rgba(7,26,51,.14);min-width:0}
+.intakeStep legend{display:flex;gap:10px;align-items:baseline;padding:0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#60758a}
+.intakeStep legend span{color:#1976ff}
+.intakeStep label{display:grid;gap:9px;font-size:12px;letter-spacing:.07em;color:#425b74}
+.intakeStep input,.intakeStep select,.intakeStep textarea{width:100%;max-width:100%;border:1px solid rgba(7,26,51,.14);background:#fff;color:#071a33;border-radius:0;box-sizing:border-box}
+.intakeStep textarea{resize:vertical;min-height:132px}
+.intakeIdentity{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-width:0}
+.intakeSubmit{justify-self:end;margin-top:24px}
+
+@media(max-width:1200px){
+  .peopleGrid--featured{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .contactSection{gap:52px}
+  .intakeStep{grid-template-columns:140px 1fr}
+}
+
+@media(max-width:800px){
+  html{overflow-x:hidden}
+  body{overflow-x:hidden;width:100%;min-width:320px}
+  .siteHeader{left:0!important;right:0!important;width:100%!important;max-width:100vw!important;margin:0!important;padding-left:16px!important;padding-right:16px!important;box-sizing:border-box}
+  .homeMobileNav{min-width:0}
+  .homeMobileNav nav{max-width:calc(100vw - 24px)!important}
+  .hero,.section{width:100%;max-width:100vw;box-sizing:border-box}
+  .heroMedia picture,.heroMedia img{display:block;width:100%;height:auto}
+  .sectorIndex{max-width:calc(100vw - 40px)}
+  .navigator{padding-top:68px;padding-bottom:70px}
+  .navigatorIntro{display:block}
+  .searchBox{margin-top:28px}
+  .issueChips{margin:24px -20px 14px;padding:0 20px 8px;opacity:.9}
+  .navigatorSelection{display:grid;gap:5px;padding:14px 0}
+  .intelligencePath{padding-top:4px}
+
+  .peopleLead{display:block;margin-bottom:34px}
+  .peopleDirectoryLink{margin-top:12px}
+  .peopleGrid--featured{display:grid;grid-template-columns:1fr;gap:42px}
+  .peopleGrid--featured .lawyerCard{margin:0!important}
+  .peopleGrid--featured .lawyerPortrait,.peopleGrid--featured .portraitPlaceholder{aspect-ratio:4/3.7}
+  .portraitPlaceholder--editorial{padding:20px}
+  .portraitPlaceholder--editorial:before{inset:14px}
+  .portraitPlaceholder--editorial:after{left:20px;top:20px}
+  .portraitPlaceholder--editorial small{right:20px;top:20px}
+  .portraitPlaceholder--editorial span{font-size:58px}
+  .peopleFooterCta{justify-content:flex-start;margin-top:30px}
+
+  .contactSection{display:block;padding-top:66px;padding-bottom:70px}
+  .contactIntro{position:static;margin-bottom:34px}
+  .intakeStep{grid-template-columns:1fr;gap:12px;padding:22px 0}
+  .intakeIdentity{grid-template-columns:1fr;gap:16px}
+  .intakeSubmit{justify-self:stretch;width:100%;margin-top:20px}
+}
+
+@media(max-width:390px){
+  body{min-width:0}
+  .siteHeader{padding-left:12px!important;padding-right:12px!important}
+  .logoLockup{width:150px!important}
+  .homeMobileNav nav{right:-12px!important;width:min(92vw,320px)!important}
+  .section{padding-left:16px!important;padding-right:16px!important}
+  .sectorIndex{margin-left:-16px!important;margin-right:-16px!important;padding-left:16px!important;padding-right:16px!important;max-width:100vw}
+  .issueChips{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .portraitPlaceholder--editorial,.peopleDirectoryLink{transition:none}
+}
