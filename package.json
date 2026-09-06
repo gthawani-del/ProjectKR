@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@studio-freight/lenis": "^1.0.42",
     "gsap": "^3.13.0",
+    "lenis": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
