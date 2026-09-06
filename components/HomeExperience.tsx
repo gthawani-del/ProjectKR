@@ -20,22 +20,21 @@ export default function HomeExperience() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-
     const sectorResults = sectors
       .filter((sector) => [sector.name, sector.summary, sector.strapline, ...sector.matters].join(' ').toLowerCase().includes(q))
       .map((sector) => ({ type: 'sector' as const, id: sector.id, title: sector.name, meta: sector.matters.slice(0, 3).join(' · ') }));
-
     const lawyerResults = lawyers
       .filter((lawyer) => [lawyer.name, lawyer.role, ...lawyer.worksAcross].join(' ').toLowerCase().includes(q))
       .map((lawyer) => ({ type: 'lawyer' as const, id: lawyer.id, title: lawyer.name, meta: `${lawyer.role} · ${lawyer.worksAcross.slice(0, 2).join(' · ')}` }));
-
     return [...sectorResults, ...lawyerResults].slice(0, 8);
   }, [query]);
 
   return (
     <main id="main-content" tabIndex={-1}>
       <header className="siteHeader">
-        <a className="brand" href="#top" aria-label="Krida Legal home"><span>KRIDA</span><small>LEGAL</small></a>
+        <a className="logoLockup" href="#top" aria-label="Krida Legal home">
+          <img src="/brand/krida-legal-logo.svg" alt="Krida Legal" />
+        </a>
         <nav aria-label="Primary navigation">
           <a href="#sectors">Sectors</a><a href="#navigator">Navigator</a><a href="#radar">Insights</a><a href="#people">People</a>
         </nav>
@@ -61,15 +60,7 @@ export default function HomeExperience() {
         <div className="sectorLayout">
           <div className="sectorIndex" role="tablist" aria-label="Krida sectors">
             {sectors.map((sector, index) => (
-              <button
-                key={sector.id}
-                id={`sector-tab-${sector.id}`}
-                className={activeSector.id === sector.id ? 'active' : ''}
-                onClick={() => setActiveSector(sector)}
-                role="tab"
-                aria-controls="sector-panel"
-                aria-selected={activeSector.id === sector.id}
-              >
+              <button key={sector.id} id={`sector-tab-${sector.id}`} className={activeSector.id === sector.id ? 'active' : ''} onClick={() => setActiveSector(sector)} role="tab" aria-controls="sector-panel" aria-selected={activeSector.id === sector.id}>
                 <span>{String(index + 1).padStart(2, '0')}</span>{sector.name}
               </button>
             ))}
@@ -95,28 +86,14 @@ export default function HomeExperience() {
           <div><h2>I’m dealing with…</h2><p>Start with the issue. We’ll connect it to the relevant sector, people and current intelligence.</p></div>
           <label className="searchBox"><span>Search issues, sectors or lawyers</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="e.g. fantasy gaming, sponsorship, trademark" /></label>
         </div>
-        {filtered.length > 0 && (
-          <div className="searchResults" aria-live="polite">
-            {filtered.map((result) => result.type === 'sector' ? (
-              <button key={`sector-${result.id}`} onClick={() => {
-                const sector = sectors.find((item) => item.id === result.id);
-                if (sector) { setActiveSector(sector); setSelectedIssue(sector.matters[0]); }
-              }}>
-                {result.title}<span>{result.meta}</span>
-              </button>
-            ) : (
-              <Link key={`lawyer-${result.id}`} href={`/people/${result.id}`}>{result.title}<span>{result.meta}</span></Link>
-            ))}
-          </div>
-        )}
+        {filtered.length > 0 && <div className="searchResults" aria-live="polite">{filtered.map((result) => result.type === 'sector' ? (
+          <button key={`sector-${result.id}`} onClick={() => { const sector = sectors.find((item) => item.id === result.id); if (sector) { setActiveSector(sector); setSelectedIssue(sector.matters[0]); } }}>{result.title}<span>{result.meta}</span></button>
+        ) : <Link key={`lawyer-${result.id}`} href={`/people/${result.id}`}>{result.title}<span>{result.meta}</span></Link>)}</div>}
         <div className="issueChips">{issuePrompts.map((issue) => <button key={issue} className={selectedIssue === issue ? 'active' : ''} onClick={() => setSelectedIssue(issue)}>{issue}</button>)}</div>
         <div className="intelligencePath">
-          <div className="pathNode"><span>Issue</span><strong>{selectedIssue}</strong></div>
-          <i>→</i>
-          <Link className="pathNode" href={`/sector/${issueSector.id}`}><span>Sector</span><strong>{issueSector.name}</strong></Link>
-          <i>→</i>
-          <div className="pathNode"><span>People</span><strong>{issueLawyers.map((l) => l.name.split(' ')[0]).join(' · ') || 'Krida team'}</strong></div>
-          <i>→</i>
+          <div className="pathNode"><span>Issue</span><strong>{selectedIssue}</strong></div><i>→</i>
+          <Link className="pathNode" href={`/sector/${issueSector.id}`}><span>Sector</span><strong>{issueSector.name}</strong></Link><i>→</i>
+          <div className="pathNode"><span>People</span><strong>{issueLawyers.map((l) => l.name.split(' ')[0]).join(' · ') || 'Krida team'}</strong></div><i>→</i>
           {issueSignals[0] ? <Link className="pathNode" href={`/insights/${issueSignals[0].id}`}><span>Signal</span><strong>{issueSignals[0].category}</strong></Link> : <div className="pathNode"><span>Signal</span><strong>Current intelligence</strong></div>}
         </div>
       </section>
@@ -141,7 +118,10 @@ export default function HomeExperience() {
         <form onSubmit={(e) => e.preventDefault()}><label>Name<input required /></label><label>Email<input type="email" required /></label><label>Nature of enquiry<select defaultValue="General enquiry"><option>General enquiry</option><option>Sport</option><option>Gaming</option><option>Intellectual Property</option><option>Business</option></select></label><label className="wide">Message<textarea rows={4} /></label><button className="primaryButton wide" type="submit">Send enquiry <span>→</span></button></form>
       </section>
 
-      <footer><div className="brand footerBrand"><span>KRIDA</span><small>LEGAL</small></div><p>Legal intelligence for a moving world.</p><div><span>Disclaimer</span><span>Privacy</span><span>Sitemap</span></div></footer>
+      <footer>
+        <a className="footerLogo" href="#top" aria-label="Krida Legal home"><img src="/brand/krida-legal-logo.svg" alt="Krida Legal" /></a>
+        <p>Legal intelligence for a moving world.</p><div><span>Disclaimer</span><span>Privacy</span><span>Sitemap</span></div>
+      </footer>
     </main>
   );
 }
