@@ -1,7 +1,9 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import InternalShell from '@/components/InternalShell';
 import { lawyers, sectors, signals } from '@/data/siteData';
+import { peopleImages } from '@/data/imageAssets';
 
 export function generateStaticParams() {
   return lawyers.map((lawyer) => ({ id: lawyer.id }));
@@ -19,7 +21,11 @@ export default async function LawyerPage({ params }: { params: Promise<{ id: str
     <InternalShell>
       <main>
         <section className="profile-hero">
-          <div className="profile-monogram" aria-hidden="true">{lawyer.initials}</div>
+          {peopleImages[lawyer.id] ? (
+            <div className="profilePortrait"><Image src={peopleImages[lawyer.id]} alt={lawyer.name} fill sizes="(max-width: 768px) 100vw, 42vw" priority /></div>
+          ) : (
+            <div className="profile-monogram" aria-hidden="true">{lawyer.initials}</div>
+          )}
           <div className="profile-copy">
             <div className="internal-kicker">People / Profile</div>
             <h1>{lawyer.name}</h1>
