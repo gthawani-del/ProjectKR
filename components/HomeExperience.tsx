@@ -156,7 +156,7 @@ export default function HomeExperience() {
 
       <footer>
         <SiteLogo className="footerLogo" />
-        <p>Legal intelligence for a moving world.</p><div><Link href="/disclaimer">Disclaimer</Link><Link href="/privacy">Privacy</Link><Link href="/sitemap">Sitemap</Link></div>
+        <p>Legal intelligence for a moving world.</p><div><Link href="/disclaimer">Disclaimer</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/sitemap">Sitemap</Link></div>
       </footer>
     </main>
   );
