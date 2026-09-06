@@ -1,7 +1,9 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import InternalShell from '@/components/InternalShell';
 import { lawyers, sectors, signals } from '@/data/siteData';
+import { insightImages, peopleImages } from '@/data/imageAssets';
 
 export function generateStaticParams() {
   return signals.map((signal) => ({ id: signal.id }));
@@ -22,6 +24,7 @@ export default async function InsightPage({ params }: { params: Promise<{ id: st
           <div className="internal-kicker">Regulatory Radar / {signal.category}</div>
           <div className="insight-meta"><span>{signal.date}</span><span>{signal.jurisdiction}</span><span>{signal.category}</span></div>
           <h1>{signal.title}</h1>
+          <div className="insightHeroMedia"><Image src={insightImages.radar} alt="Krida Legal regulatory radar" fill sizes="100vw" priority /></div>
         </section>
 
         <article className="article-body">
@@ -40,7 +43,7 @@ export default async function InsightPage({ params }: { params: Promise<{ id: st
         <section className="internal-section">
           <div className="section-grid">
             <div><div className="section-label">02 / Relevant people</div><h2>People connected to the subject.</h2></div>
-            <div className="people-context">{relatedLawyers.map((lawyer) => <article className="person-node" key={lawyer.id}><div className="initials">{lawyer.initials}</div><h3>{lawyer.name}</h3><p>{lawyer.role}</p><Link href={`/people/${lawyer.id}`}>View profile →</Link></article>)}</div>
+            <div className="people-context">{relatedLawyers.map((lawyer) => <article className="person-node" key={lawyer.id}>{peopleImages[lawyer.id]?<div className="lawyerPortrait"><Image src={peopleImages[lawyer.id]} alt={lawyer.name} fill sizes="(max-width: 768px) 88vw, 28vw" /></div>:<div className="initials">{lawyer.initials}</div>}<h3>{lawyer.name}</h3><p>{lawyer.role}</p><Link href={`/people/${lawyer.id}`}>View profile →</Link></article>)}</div>
           </div>
         </section>
       </main>
