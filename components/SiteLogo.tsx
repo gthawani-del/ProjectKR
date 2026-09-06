@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function SiteLogo({ className = '' }: { className?: string }) {
   return (
-    <Link className={`siteLogo ${className}`} href="/" aria-label="Krida Legal home">
+    <Link className={`siteLogo ${className}`} href="/#top" aria-label="Krida Legal home">
       <Image
         src="/images/brand/krida-legal-logo.png"
         alt="Krida Legal"
