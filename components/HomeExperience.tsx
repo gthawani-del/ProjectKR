@@ -20,11 +20,20 @@ export default function HomeExperience() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    return sectors.filter((sector) => [sector.name, sector.summary, sector.strapline, ...sector.matters].join(' ').toLowerCase().includes(q));
+
+    const sectorResults = sectors
+      .filter((sector) => [sector.name, sector.summary, sector.strapline, ...sector.matters].join(' ').toLowerCase().includes(q))
+      .map((sector) => ({ type: 'sector' as const, id: sector.id, title: sector.name, meta: sector.matters.slice(0, 3).join(' · ') }));
+
+    const lawyerResults = lawyers
+      .filter((lawyer) => [lawyer.name, lawyer.role, ...lawyer.worksAcross].join(' ').toLowerCase().includes(q))
+      .map((lawyer) => ({ type: 'lawyer' as const, id: lawyer.id, title: lawyer.name, meta: `${lawyer.role} · ${lawyer.worksAcross.slice(0, 2).join(' · ')}` }));
+
+    return [...sectorResults, ...lawyerResults].slice(0, 8);
   }, [query]);
 
   return (
-    <main>
+    <main id="main-content" tabIndex={-1}>
       <header className="siteHeader">
         <a className="brand" href="#top" aria-label="Krida Legal home"><span>KRIDA</span><small>LEGAL</small></a>
         <nav aria-label="Primary navigation">
@@ -52,12 +61,20 @@ export default function HomeExperience() {
         <div className="sectorLayout">
           <div className="sectorIndex" role="tablist" aria-label="Krida sectors">
             {sectors.map((sector, index) => (
-              <button key={sector.id} className={activeSector.id === sector.id ? 'active' : ''} onClick={() => setActiveSector(sector)} role="tab" aria-selected={activeSector.id === sector.id}>
+              <button
+                key={sector.id}
+                id={`sector-tab-${sector.id}`}
+                className={activeSector.id === sector.id ? 'active' : ''}
+                onClick={() => setActiveSector(sector)}
+                role="tab"
+                aria-controls="sector-panel"
+                aria-selected={activeSector.id === sector.id}
+              >
                 <span>{String(index + 1).padStart(2, '0')}</span>{sector.name}
               </button>
             ))}
           </div>
-          <div className="sectorDetail">
+          <div className="sectorDetail" id="sector-panel" role="tabpanel" aria-labelledby={`sector-tab-${activeSector.id}`}>
             <div>
               <div className="accentRule" />
               <h2>{activeSector.name}</h2>
@@ -78,7 +95,20 @@ export default function HomeExperience() {
           <div><h2>I’m dealing with…</h2><p>Start with the issue. We’ll connect it to the relevant sector, people and current intelligence.</p></div>
           <label className="searchBox"><span>Search issues, sectors or lawyers</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="e.g. fantasy gaming, sponsorship, trademark" /></label>
         </div>
-        {filtered.length > 0 && <div className="searchResults" aria-live="polite">{filtered.map((sector) => <button key={sector.id} onClick={() => { setActiveSector(sector); setSelectedIssue(sector.matters[0]); }}>{sector.name}<span>{sector.matters.slice(0,3).join(' · ')}</span></button>)}</div>}
+        {filtered.length > 0 && (
+          <div className="searchResults" aria-live="polite">
+            {filtered.map((result) => result.type === 'sector' ? (
+              <button key={`sector-${result.id}`} onClick={() => {
+                const sector = sectors.find((item) => item.id === result.id);
+                if (sector) { setActiveSector(sector); setSelectedIssue(sector.matters[0]); }
+              }}>
+                {result.title}<span>{result.meta}</span>
+              </button>
+            ) : (
+              <Link key={`lawyer-${result.id}`} href={`/people/${result.id}`}>{result.title}<span>{result.meta}</span></Link>
+            ))}
+          </div>
+        )}
         <div className="issueChips">{issuePrompts.map((issue) => <button key={issue} className={selectedIssue === issue ? 'active' : ''} onClick={() => setSelectedIssue(issue)}>{issue}</button>)}</div>
         <div className="intelligencePath">
           <div className="pathNode"><span>Issue</span><strong>{selectedIssue}</strong></div>
