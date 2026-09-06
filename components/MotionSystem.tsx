@@ -19,6 +19,7 @@ export default function MotionSystem() {
 
     let lenis: Lenis | null = null;
     let rafId = 0;
+    const settleTimers: number[] = [];
 
     if (!reduced && !mobile) {
       lenis = new Lenis({
@@ -37,6 +38,14 @@ export default function MotionSystem() {
       lenis.on('scroll', ScrollTrigger.update);
     }
 
+    const jumpToTop = () => {
+      if (lenis) {
+        lenis.scrollTo(0, { duration: 0, force: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    };
+
     const scrollToTop = () => {
       if (lenis) {
         lenis.scrollTo(0, { duration: 0.9, force: true, onComplete: () => ScrollTrigger.refresh() });
@@ -45,12 +54,29 @@ export default function MotionSystem() {
       }
     };
 
+    // Cross-route Home navigation must land at the true document top.
+    // Next/browser restoration plus Lenis can otherwise preserve the previous homepage offset.
+    if (pathname === '/' && window.location.hash === '#top') {
+      jumpToTop();
+      requestAnimationFrame(() => {
+        jumpToTop();
+        ScrollTrigger.refresh();
+      });
+      settleTimers.push(window.setTimeout(() => {
+        jumpToTop();
+        ScrollTrigger.refresh();
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+      }, 120));
+    }
+
     const onScrollTopRequest = () => scrollToTop();
     window.addEventListener('krida:scroll-top', onScrollTopRequest);
 
-    const topLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href="#top"]'));
+    const topLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href="#top"], a[href="/#top"]'));
     const topLinkHandlers = topLinks.map((link) => {
       const handler = (event: MouseEvent) => {
+        const samePage = window.location.pathname === '/';
+        if (!samePage && link.getAttribute('href') === '/#top') return;
         event.preventDefault();
         history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
         scrollToTop();
@@ -61,6 +87,7 @@ export default function MotionSystem() {
 
     if (reduced) {
       return () => {
+        settleTimers.forEach((timer) => window.clearTimeout(timer));
         window.removeEventListener('krida:scroll-top', onScrollTopRequest);
         topLinkHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
       };
@@ -175,6 +202,7 @@ export default function MotionSystem() {
     ScrollTrigger.refresh();
 
     return () => {
+      settleTimers.forEach((timer) => window.clearTimeout(timer));
       window.removeEventListener('krida:scroll-top', onScrollTopRequest);
       topLinkHandlers.forEach(({ link, handler }) => link.removeEventListener('click', handler));
       ctx.revert();
