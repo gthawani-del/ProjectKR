@@ -1,0 +1,190 @@
+/* Authoritative mobile layout guard. Loaded last to prevent older QA/refinement layers from reintroducing width/position regressions. */
+@media (max-width:800px){
+  :root{--mobile-header-h:72px}
+
+  html,body{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    overflow-x:hidden!important;
+    overscroll-behavior-x:none;
+  }
+  body{position:relative!important}
+  #main-content{
+    position:relative!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+  }
+  #main-content>*,.internal-page,.internal-page>*{
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  /* Header must always be anchored to the viewport, never to an oversized child. */
+  .siteHeader,.internal-nav{
+    left:0!important;
+    right:0!important;
+    transform:none!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:var(--mobile-header-h)!important;
+    margin:0!important;
+    padding:0 16px!important;
+    box-sizing:border-box!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    gap:12px!important;
+    align-items:center!important;
+  }
+  .siteHeader>nav,.siteHeader>.headerAction,.internal-nav>nav,.internal-nav>.internal-search{display:none!important}
+  .logoLockup,.internal-logo{width:min(170px,56vw)!important;max-width:56vw!important;min-width:0!important}
+
+  /* Full-viewport mobile menu. It no longer changes document width or creates a horizontally scrollable panel. */
+  .mobileNav{display:block!important;position:static!important;min-width:0!important;justify-self:end!important;color:#fff}
+  .mobileNav summary{
+    min-height:44px!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:9px!important;
+    white-space:nowrap!important;
+    list-style:none!important;
+    color:#fff!important;
+    font-size:14px!important;
+  }
+  .mobileNav summary::-webkit-details-marker{display:none!important}
+  .mobileNav nav{
+    position:fixed!important;
+    inset:var(--mobile-header-h) 0 0 0!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    height:calc(100dvh - var(--mobile-header-h))!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:18px 20px 32px!important;
+    display:grid!important;
+    grid-auto-rows:minmax(56px,auto)!important;
+    align-content:start!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior:contain!important;
+    background:#000!important;
+    border:0!important;
+    box-shadow:none!important;
+    transform:none!important;
+    z-index:999!important;
+  }
+  .mobileNav nav a{
+    width:100%!important;
+    min-width:0!important;
+    min-height:56px!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    border-bottom:1px solid rgba(255,255,255,.14)!important;
+    color:#fff!important;
+    font-size:18px!important;
+    line-height:1.25!important;
+    white-space:normal!important;
+  }
+
+  /* Home hero is a true single-column mobile composition. */
+  .hero{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    padding-top:var(--mobile-header-h)!important;
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:none!important;
+    overflow:hidden!important;
+  }
+  .heroCopy{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:48px 20px 36px!important;
+  }
+  .heroCopy h1{
+    max-width:100%!important;
+    font-size:clamp(48px,14vw,60px)!important;
+    line-height:.93!important;
+    overflow-wrap:normal!important;
+  }
+  .heroCopy>p{max-width:100%!important}
+  .heroMedia,.heroMedia picture,.heroMedia img{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  .heroMedia{overflow:hidden!important}
+  .heroMedia img{height:auto!important;object-fit:cover!important}
+  .heroRail{display:none!important}
+
+  /* Sections stay within viewport. Horizontal option rails scroll internally rather than widening the page. */
+  .section{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding-left:20px!important;
+    padding-right:20px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+  .sectorLayout,.sectorDetail,.navigatorIntro,.searchResults,.intelligencePath,.radarGrid,.peopleLead,.peopleGrid,.contactSection,.intakeForm,.intakeStep,.intakeIdentity{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  .sectorIndex,.issueChips{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    padding-left:0!important;
+    padding-right:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    overscroll-behavior-x:contain!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  .sectorIndex{margin-bottom:28px!important;padding-bottom:14px!important}
+  .issueChips{margin-top:24px!important;margin-bottom:14px!important;padding-bottom:8px!important}
+  .sectorDetail{display:flex!important;flex-direction:column!important}
+  .sectorVisual,.radarGlobe,.lawyerPortrait,.portraitPlaceholder,.profilePortrait,.internalHeroMedia,.insightHeroMedia{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  .searchBox,.searchBox input,.contactSection input,.contactSection select,.contactSection textarea{max-width:100%!important;min-width:0!important}
+  .searchResults{grid-template-columns:1fr!important}
+  .peopleGrid--featured{grid-template-columns:1fr!important}
+  .contactSection{display:block!important}
+  .intakeStep{grid-template-columns:1fr!important}
+  .intakeIdentity{grid-template-columns:1fr!important}
+
+  footer,.internal-footer{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+}
+
+@media (max-width:390px){
+  .siteHeader,.internal-nav{padding-left:12px!important;padding-right:12px!important}
+  .section{padding-left:16px!important;padding-right:16px!important}
+  .heroCopy{padding-left:16px!important;padding-right:16px!important}
+  .logoLockup,.internal-logo{width:min(154px,55vw)!important}
+  .mobileNav nav{padding-left:16px!important;padding-right:16px!important}
+}
